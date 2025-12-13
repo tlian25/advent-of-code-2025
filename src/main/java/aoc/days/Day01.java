@@ -3,13 +3,6 @@ package aoc.days;
 import java.util.List;
 import aoc.utils.IOUtils;
 
-/**
- * Advent of Code Java starter template.
- *
- * Usage: - Compile: javac -d out src/main/java/aoc/DayTemplate.java - Run with
- * file: java -cp out aoc.DayTemplate input/day01.txt - Or pipe input: cat
- * input/day01.txt | java -cp out aoc.DayTemplate
- */
 public class Day01 {
     public static void run() throws Exception {
         List<String> lines = IOUtils.readLinesForDay(1);
