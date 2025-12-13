@@ -5,10 +5,10 @@ import aoc.days.Day01;
 /**
  * Advent of Code Java starter template.
  *
- * Usage:
- *  - Compile: javac -d out src/main/java/aoc/DayTemplate.java
- *  - Run with file: java -cp out aoc.DayTemplate input/day01.txt
- *  - Or pipe input: cat input/day01.txt | java -cp out aoc.DayTemplate
+ * <p>
+ * Usage: - Compile: javac -d out src/main/java/aoc/DayTemplate.java - Run with
+ * file: java -cp out aoc.DayTemplate input/day01.txt - Or pipe input: cat
+ * input/day01.txt | java -cp out aoc.DayTemplate
  */
 public class AocRunner {
     public static void main(String[] args) throws Exception {

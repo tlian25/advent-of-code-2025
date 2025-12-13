@@ -5,13 +5,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-/**
- * Small IO helper for reading puzzle input.
- */
+/** Small IO helper for reading puzzle input. */
 public final class IOUtils {
     /**
-     * Read input from the first command-line argument (filename) or stdin if no args are provided.
-     * Returns the input as a list of lines.
+     * Read input from the first command-line argument (filename) or stdin if no
+     * args are provided. Returns the input as a list of lines.
      */
     public static List<String> readLinesFromArgsOrStdin(String[] args) throws IOException {
         String input;
