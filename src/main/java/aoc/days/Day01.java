@@ -51,7 +51,7 @@ public class Day01 {
 
             while (turns > 0) {
                 current_num += direction;
-                System.out.println("Current num: " + current_num);
+
                 if (current_num == 0) {
                     zero_count += 1;
                 } else if (current_num < 0) {
