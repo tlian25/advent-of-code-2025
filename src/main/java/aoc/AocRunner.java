@@ -1,6 +1,6 @@
 package aoc;
 
-import aoc.days.Day01;
+import aoc.days.*;
 
 public class AocRunner {
     public static void main(String[] args) throws Exception {
@@ -15,6 +15,9 @@ public class AocRunner {
         switch (day) {
             case 1 -> {
                 Day01.run();
+            }
+            case 2 -> {
+                Day02.run();
             }
             // Add more days here as needed
             default -> System.out.println("Day not implemented yet.");
