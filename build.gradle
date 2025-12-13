@@ -35,6 +35,8 @@ spotless {
         target 'src/main/java/**/*.java', 'src/test/java/**/*.java'
         // Use Eclipse formatter so indentation can be configured (4 spaces)
         eclipse().configFile(file('config/spotless/eclipse-java-formatter.xml'))
+        // Remove unused imports automatically
+        removeUnusedImports()
     }
 }
 

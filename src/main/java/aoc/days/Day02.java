@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import aoc.utils.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import java.lang.Math;
-import java.math.BigInteger;
 
 public class Day02 {
     public static void run() throws Exception {
