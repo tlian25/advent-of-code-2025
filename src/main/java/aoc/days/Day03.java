@@ -58,7 +58,6 @@ public class Day03 {
     }
 
     public static Long part2(List<String> lines) {
-        // DFS approach
         Long total_joltage = 0L;
         for (String line : lines) {
             List<Integer> batteries = parseLine(line);
@@ -67,47 +66,6 @@ public class Day03 {
             total_joltage += line_joltage;
         }
         return total_joltage;
-    }
-}
-
-class DFS {
-    private List<Integer> taken = new ArrayList<>();
-    private Long max_joltage = 0L;
-
-    public void search(List<Integer> batteries, int index, int count) {
-        if (index + count > batteries.size()) {
-            return;
-        }
-
-        // Take index
-        taken.add(batteries.get(index));
-        count -= 1;
-
-        if (count == 0) {
-            Long joltage = calculateJoltage(taken);
-            max_joltage = Math.max(max_joltage, joltage);
-        } else {
-            search(batteries, index + 1, count);
-        }
-
-        // Reset state
-        taken.removeLast();
-        count += 1;
-
-        // Not take index
-        search(batteries, index + 1, count);
-    }
-
-    public Long getMaxJoltage() {
-        return max_joltage;
-    }
-
-    private Long calculateJoltage(List<Integer> taken) {
-        Long joltage = 0L;
-        for (int i = 0; i < taken.size(); i++) {
-            joltage = joltage * 10 + taken.get(i);
-        }
-        return joltage;
     }
 }
 
