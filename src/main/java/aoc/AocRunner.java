@@ -25,6 +25,9 @@ public class AocRunner {
             case 4 -> {
                 Day04.run();
             }
+            case 5 -> {
+                Day05.run();
+            }
             // Add more days here as needed
             default -> System.out.println("Day not implemented yet.");
         }
