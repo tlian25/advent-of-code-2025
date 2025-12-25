@@ -13,24 +13,83 @@ import com.google.common.collect.Sets;
 import org.apache.commons.lang3.tuple.Triple;
 
 import aoc.utils.IOUtils;
+import aoc.utils.Point3D;
 
-class Point {
-    int x;
-    int y;
-    int z;
-
-    Point(int x, int y, int z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+public class Day08 {
+    public static void run() throws Exception {
+        List<String> lines = IOUtils.readLinesForDay(8);
+        System.out.println("Part 1: " + part1(lines));
+        System.out.println("Part 2: " + part2(lines));
     }
 
-    protected static Double distance(Point a, Point b) {
-        return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2) + Math.pow(a.z - b.z, 2));
+    private static List<Point3D> parseInput(List<String> lines) {
+        return lines.stream().map(line -> {
+            String[] parts = line.split(",");
+            return new Point3D(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+        }).collect(java.util.stream.Collectors.toCollection(java.util.ArrayList::new));
     }
 
-    public String toString() {
-        return String.format("(%d, %d, %d)", x, y, z);
+    private static Queue<Triple<Double, Integer, Integer>> getAllDistances(List<Point3D> points) {
+        // Heap of (distance, point1_index, point2_index) ordered by distance
+        Queue<Triple<Double, Integer, Integer>> queue = new PriorityQueue<>(
+                (a, b) -> Double.compare(a.getLeft(), b.getLeft()));
+
+        // Use LinkedHashSet to preserve insertion order from the list
+        Set<Integer> indexSet = new HashSet<>();
+
+        // Map points to their original indices to avoid indexOf calls
+        for (int i = 0; i < points.size(); i++) {
+            indexSet.add(i);
+        }
+
+        for (Set<Integer> pair : Sets.combinations(indexSet, 2)) {
+            Iterator<Integer> it = pair.iterator();
+            int i = it.next();
+            int j = it.next();
+            Point3D a = points.get(i);
+            Point3D b = points.get(j);
+            double d = Point3D.distance(a, b);
+            queue.add(Triple.of(d, i, j));
+        }
+
+        return queue;
+    }
+
+    public static Long part1(List<String> lines) {
+        List<Point3D> points = parseInput(lines);
+        Queue<Triple<Double, Integer, Integer>> distanceQueue = getAllDistances(points);
+        Graph graph = new Graph(points.size());
+
+        for (int connections = 0; connections < 1000; connections++) {
+            Triple<Double, Integer, Integer> entry = distanceQueue.poll();
+            graph.addEdge(entry.getMiddle(), entry.getRight());
+        }
+
+        // Multiply sizes of three largest components
+        List<Set<Integer>> components = graph.getConnectedComponents();
+        List<Long> componentSizes = components.stream().map(Set::size).map(Long::valueOf)
+                .sorted(java.util.Collections.reverseOrder()).toList();
+
+        return componentSizes.stream().limit(3).reduce(1L, (a, b) -> a * b);
+    }
+
+    public static Long part2(List<String> lines) {
+        List<Point3D> points = parseInput(lines);
+        Queue<Triple<Double, Integer, Integer>> distanceQueue = getAllDistances(points);
+        Graph graph = new Graph(points.size());
+
+        Triple<Double, Integer, Integer> lastSeen = Triple.of(0.0, -1, -1);
+        while (!graph.seenAll() && !distanceQueue.isEmpty()) {
+            Triple<Double, Integer, Integer> entry = distanceQueue.poll();
+            graph.addEdge(entry.getMiddle(), entry.getRight());
+            lastSeen = entry;
+        }
+
+        // Multiply X coordinates of last two points to be connected
+        Point3D a = points.get(lastSeen.getMiddle());
+        Point3D b = points.get(lastSeen.getRight());
+
+        return Long.valueOf(a.getX()) * Long.valueOf(b.getX());
     }
 }
 
@@ -86,83 +145,5 @@ class Graph {
                 exploreComponent(neighbor, visited, component);
             }
         }
-    }
-}
-
-public class Day08 {
-    public static void run() throws Exception {
-        List<String> lines = IOUtils.readLinesForDay(8);
-        System.out.println("Part 1: " + part1(lines));
-        System.out.println("Part 2: " + part2(lines));
-    }
-
-    private static List<Point> parseInput(List<String> lines) {
-        return lines.stream().map(line -> {
-            String[] parts = line.split(",");
-            return new Point(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
-        }).collect(java.util.stream.Collectors.toCollection(java.util.ArrayList::new));
-    }
-
-    private static Queue<Triple<Double, Integer, Integer>> getAllDistances(List<Point> points) {
-        // Heap of (distance, point1_index, point2_index) ordered by distance
-        Queue<Triple<Double, Integer, Integer>> queue = new PriorityQueue<>(
-                (a, b) -> Double.compare(a.getLeft(), b.getLeft()));
-
-        // Use LinkedHashSet to preserve insertion order from the list
-        Set<Integer> indexSet = new HashSet<>();
-
-        // Map points to their original indices to avoid indexOf calls
-        for (int i = 0; i < points.size(); i++) {
-            indexSet.add(i);
-        }
-
-        for (Set<Integer> pair : Sets.combinations(indexSet, 2)) {
-            Iterator<Integer> it = pair.iterator();
-            int i = it.next();
-            int j = it.next();
-            Point a = points.get(i);
-            Point b = points.get(j);
-            double d = Point.distance(a, b);
-            queue.add(Triple.of(d, i, j));
-        }
-
-        return queue;
-    }
-
-    public static Long part1(List<String> lines) {
-        List<Point> points = parseInput(lines);
-        Queue<Triple<Double, Integer, Integer>> distanceQueue = getAllDistances(points);
-        Graph graph = new Graph(points.size());
-
-        for (int connections = 0; connections < 1000; connections++) {
-            Triple<Double, Integer, Integer> entry = distanceQueue.poll();
-            graph.addEdge(entry.getMiddle(), entry.getRight());
-        }
-
-        // Multiply sizes of three largest components
-        List<Set<Integer>> components = graph.getConnectedComponents();
-        List<Long> componentSizes = components.stream().map(Set::size).map(Long::valueOf)
-                .sorted(java.util.Collections.reverseOrder()).toList();
-
-        return componentSizes.stream().limit(3).reduce(1L, (a, b) -> a * b);
-    }
-
-    public static Long part2(List<String> lines) {
-        List<Point> points = parseInput(lines);
-        Queue<Triple<Double, Integer, Integer>> distanceQueue = getAllDistances(points);
-        Graph graph = new Graph(points.size());
-
-        Triple<Double, Integer, Integer> lastSeen = Triple.of(0.0, -1, -1);
-        while (!graph.seenAll() && !distanceQueue.isEmpty()) {
-            Triple<Double, Integer, Integer> entry = distanceQueue.poll();
-            graph.addEdge(entry.getMiddle(), entry.getRight());
-            lastSeen = entry;
-        }
-
-        // Multiply X coordinates of last two points to be connected
-        Point a = points.get(lastSeen.getMiddle());
-        Point b = points.get(lastSeen.getRight());
-
-        return Long.valueOf(a.x) * Long.valueOf(b.x);
     }
 }
