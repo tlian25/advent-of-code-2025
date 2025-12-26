@@ -1,7 +1,6 @@
 package aoc.days;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -51,11 +50,11 @@ class GraphLines {
 class FilledGrid {
 
     private final List<Point2D> vertices;
-    private final HashMap<Point2D, Boolean> cache;
+    private final Geometry geometry;
 
     public FilledGrid() {
         vertices = new ArrayList<>();
-        cache = new HashMap<>();
+        geometry = new Geometry(vertices);
     }
 
     public void addVertex(Point2D p) {
@@ -70,12 +69,9 @@ class FilledGrid {
         }
     }
 
-    private boolean isInside(Point2D p) {
-        // if (!cache.containsKey(p)) {
-        // cache.put(p, Geometry.pointInPolygon(vertices, p, true));
-        // }
-        // return cache.get(p);
-        return Geometry.pointInPolygon(vertices, p, true);
+    private boolean isInside(Long x, Long y) {
+        Pair<Long, Long> point = Pair.of(x, y);
+        return geometry.pointInPolygon(point, true);
     }
 
     public boolean boxIsInside(Point2D a, Point2D b) {
@@ -86,16 +82,14 @@ class FilledGrid {
 
         // Check horizontal borders
         for (long y = y1; y <= y2; y++) {
-            // System.out.println("Checking horizontal border at %s, %s".formatted(x1, y));
-            if (!isInside(new Point2D(x1, y)) || !isInside(new Point2D(x2, y))) {
+            if (!isInside(x1, y) || !isInside(x2, y)) {
                 return false;
             }
         }
 
         // Check vertical borders
         for (long x = x1; x <= x2; x++) {
-            // System.out.println("Checking horizontal border at %s, %s".formatted(x, y1));
-            if (!isInside(new Point2D(x, y1)) || !isInside(new Point2D(x, y2))) {
+            if (!isInside(x, y1) || !isInside(x, y2)) {
                 return false;
             }
         }
@@ -149,7 +143,6 @@ public class Day09 {
             Point2D a = it.next();
             Point2D b = it.next();
             long area = Point2D.area(a, b);
-            System.out.println("Checked area between " + a + " and " + b + ": " + area);
             if (area > maxArea && grid.boxIsInside(a, b)) {
                 System.out.println("Updating max area: " + area);
                 maxArea = area;

@@ -1,5 +1,7 @@
 package aoc.utils;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 public class Point2D {
     long x;
     long y;
@@ -12,6 +14,10 @@ public class Point2D {
     public Point2D(long x, long y) {
         this.x = x;
         this.y = y;
+    }
+
+    public Pair<Long, Long> toPair() {
+        return Pair.of(x, y);
     }
 
     public static Long area(Point2D a, Point2D b) {
