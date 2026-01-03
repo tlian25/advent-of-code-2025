@@ -52,6 +52,9 @@ public class Day10 {
     }
 
     public static Long part2(List<String> lines) {
+        // Did not finish in Java. Implemented in Python using Scipy Linear Programming
+        // instead
+        // to minimize the number of button steps to reach the target counters.
         Long total_steps = 0L;
         for (String line : lines) {
             Machine2 machine = setupMachine2(line);
@@ -169,9 +172,7 @@ class Machine2 {
         sb.append(target);
         sb.append("\n");
         sb.append("State:");
-        for (Integer counter : counters) {
-            sb.append(counter.toString());
-        }
+        sb.append(counterString(counters));
         sb.append("\nInstructions:\n");
         for (List<Integer> inst : instructions) {
             sb.append(inst.toString());
