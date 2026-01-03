@@ -1,12 +1,9 @@
 package aoc.days;
 
 import java.util.List;
-import aoc.utils.IOUtils;
 
-class C {
-    public static final char ROLL = '@';
-    public static final char SPACE = '.';
-}
+import aoc.utils.Constant;
+import aoc.utils.IOUtils;
 
 class Grid {
     private final char[][] grid;
@@ -52,7 +49,7 @@ class Grid {
                 int nr = r + dr;
                 int nc = c + dc;
                 if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
-                    if (grid[nr][nc] == C.ROLL) {
+                    if (grid[nr][nc] == Constant.ROLL) {
                         roll_count += 1;
                     }
                 }
@@ -76,7 +73,7 @@ public class Day04 {
         for (int r = 0; r < grid.getRows(); r++) {
             for (int c = 0; c < grid.getCols(); c++) {
                 char cell = grid.getCell(r, c);
-                if (cell == C.ROLL) {
+                if (cell == Constant.ROLL) {
                     int adjacent_rolls = grid.getAdjacentRolls(r, c);
                     // System.out.println(String.format("Roll at (%d, %d) has %d adjacent rolls", r,
                     // c, adjacent_rolls));
@@ -101,12 +98,12 @@ public class Day04 {
             for (int r = 0; r < grid.getRows(); r++) {
                 for (int c = 0; c < grid.getCols(); c++) {
                     char cell = grid.getCell(r, c);
-                    if (cell == C.ROLL) {
+                    if (cell == Constant.ROLL) {
                         int adjacent_rolls = grid.getAdjacentRolls(r, c);
                         // System.out.println(String.format("Roll at (%d, %d) has %d adjacent rolls", r,
                         // c, adjacent_rolls));
                         if (adjacent_rolls < 4) {
-                            grid.setCell(r, c, C.SPACE);
+                            grid.setCell(r, c, Constant.SPACE);
                             can_access += 1;
                             removed = true;
                         }
